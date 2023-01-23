@@ -50,6 +50,7 @@ if res.ok:
     print(result)
 else:
     print("Endpoint /model/run not ok!")
+    print(res.json())
     exit(1)
 
 res = requests.get(api_endpoint + '/model/status/' + model_run_id)

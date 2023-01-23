@@ -1,7 +1,7 @@
 import requests
 
 from tno.esdl_add_etm_kpis_adapter.model.model import Model, ModelState
-from tno.esdl_add_etm_kpis_adapter.types import ESDLAddETMKPIsAdapterConfig
+from tno.esdl_add_etm_kpis_adapter.types import ESDLAddETMKPIsAdapterConfig, ModelRunInfo
 
 # from esdl import esdl
 # from esdl.esdl_handler import EnergySystemHandler
@@ -43,10 +43,8 @@ class ESDLAddKPIs(Model):
             model_run_info = Model.store_result(self, model_run_id=model_run_id, result=esdl_str)
             return model_run_info
         else:
-            # TODO: fix this
-            return None
-            # return ModelRunInfo(
-            #     model_run_id=model_run_id,
-            #     state=ModelState.ERROR,
-            #     reason=f"Error in ETM.run(): ETM API returned: {response.status_code} {response.reason}"
-            # )
+            return ModelRunInfo(
+                model_run_id=model_run_id,
+                state=ModelState.ERROR,
+                reason=f"Error in ETM.run(): ETM API returned: {response.status_code} {response.reason}"
+            )

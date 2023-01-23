@@ -24,7 +24,7 @@ class ETMConfig:
 
 @dataclass
 class ESDLAddETMKPIsAdapterConfig:
-    scenario_ID: str
+    scenario_ID: int
     KPI_area: str
     etm_config: ETMConfig
     input_esdl_file_path: Optional[str] = None
