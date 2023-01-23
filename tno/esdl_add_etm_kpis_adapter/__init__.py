@@ -29,14 +29,12 @@ def create_app(object_name):
     logger.info("Setting up app.")
 
     app = Flask(__name__)
-    logger.info(object_name) # Hierna stopt hij er mee
     app.config.from_object(object_name)
     app.wsgi_app = ProxyFix(app.wsgi_app)
 
     env.init_app(app, env_file=".env")
     api.init_app(app)
 
-    logger.info("Importing blueprints.")
     # Register blueprints.
     from tno.esdl_add_etm_kpis_adapter.apis.status import api as status_api
     from tno.esdl_add_etm_kpis_adapter.apis.model_api import api as model_api
@@ -49,7 +47,7 @@ def create_app(object_name):
         logger.info("Registering with MM Registry")
 
         # Register adapter to MM Registry
-        registry_data = {"uri": "http://esdl-add-price-profile-adapter:9202", "used_workers": 0, "name": "ESDL_ETM",
+        registry_data = {"uri": "http://esdl-add-etm-kpis-adapter:9202", "used_workers": 0, "name": "ESDL_ETM",
                          "owner": "localhost", "version": "1.0", "max_workers": 1}
 
         try:

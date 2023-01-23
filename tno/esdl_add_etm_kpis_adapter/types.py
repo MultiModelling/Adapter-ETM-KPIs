@@ -16,20 +16,6 @@ class ModelState(str, Enum):
     SUCCEEDED = "SUCCEEDED"
     ERROR = "ERROR"
 
-
-@dataclass
-class InfluxDBConfig:
-    host: Optional[str] = None
-    port: Optional[int] = None
-    esdl_host: Optional[str] = None
-    esdl_port: Optional[int] = None
-    username: Optional[str] = None
-    password: Optional[str] = None
-    database: Optional[str] = None
-    measurement: Optional[str] = None
-    field: Optional[str] = None
-
-
 @dataclass
 class ETMConfig:
     endpoint: str
@@ -38,12 +24,11 @@ class ETMConfig:
 
 @dataclass
 class ESDLAddETMKPIsAdapterConfig:
-    input_esdl_file_path: Optional[str] = None
     scenario_ID: str
     KPI_area: str
     etm_config: ETMConfig
+    input_esdl_file_path: Optional[str] = None
     output_file_path: Optional[str] = None
-    influxdb_config: Optional[InfluxDBConfig] = None
     base_path: Optional[str] = None
 
 

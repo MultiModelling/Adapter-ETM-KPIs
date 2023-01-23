@@ -2,6 +2,7 @@ from flask import jsonify
 from flask_smorest import Blueprint
 from flask.views import MethodView
 from tno.shared.log import get_logger
+
 from tno.esdl_add_etm_kpis_adapter.types import ModelRunInfo, ESDLAddETMKPIsAdapterConfig
 from tno.esdl_add_etm_kpis_adapter.model.esdl_add_kpis import ESDLAddKPIs
 

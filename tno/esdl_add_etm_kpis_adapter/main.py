@@ -19,7 +19,7 @@ from werkzeug.exceptions import HTTPException
 
 logger = get_logger("tno.flask_rest_api.main")
 
-app = create_app("tno.esdl_add_price_profile_adapter.settings.%sConfig" % EnvSettings.env().capitalize())
+app = create_app("tno.esdl_add_etm_kpis_adapter.settings.%sConfig" % EnvSettings.env().capitalize())
 
 
 @app.before_request

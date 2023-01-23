@@ -1,4 +1,4 @@
-# MMvIB ESDL Add Price Profile Model Adapter
+# MMvIB ESDL AddETM KPIs Model Adapter
 
 The API is available at http://localhost:9201/openapi
 

@@ -1,25 +1,10 @@
-from dataclasses import dataclass
-from datetime import datetime
-from typing import Optional
-from uuid import uuid4
-
-import pytz
 import requests
 
 from tno.esdl_add_etm_kpis_adapter.model.model import Model, ModelState
-from tno.esdl_add_etm_kpis_adapter.types import ESDLAddETMKPIsAdapterConfig, InfluxDBConfig
+from tno.esdl_add_etm_kpis_adapter.types import ESDLAddETMKPIsAdapterConfig
 
-from esdl import esdl
-from esdl.esdl_handler import EnergySystemHandler
-
-from influxdb import InfluxDBClient
-
-ETM_DATETIME_FORMAT = "%Y-%m-%d %H:%M"
-INFLUXDB_DATETIME_FORMAT = "%Y-%m-%dT%H:%M:00+0000"
-
-cet = pytz.timezone("Europe/Amsterdam")
-utc = pytz.timezone("UTC")
-
+# from esdl import esdl
+# from esdl.esdl_handler import EnergySystemHandler
 
 class ESDLAddKPIs(Model):
 
