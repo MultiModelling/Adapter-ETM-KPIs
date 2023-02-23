@@ -47,7 +47,7 @@ def create_app(object_name):
         logger.info("Registering with MM Registry")
 
         # Register adapter to MM Registry
-        registry_data = {"uri": "http://esdl-add-etm-kpis-adapter:9202", "used_workers": 0, "name": "ESDL_ETM",
+        registry_data = {"uri": "http://mmvib-etm-kpis-adapter:9202", "used_workers": 0, "name": "ETM_KPIS",
                          "owner": "localhost", "version": "1.0", "max_workers": 1}
 
         try:

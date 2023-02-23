@@ -1,10 +1,14 @@
 import requests
+import urllib.parse
 
 from tno.esdl_add_etm_kpis_adapter.model.model import Model, ModelState
 from tno.esdl_add_etm_kpis_adapter.types import ESDLAddETMKPIsAdapterConfig, ModelRunInfo
 
 # from esdl import esdl
 # from esdl.esdl_handler import EnergySystemHandler
+
+from tno.shared.log import get_logger
+logger = get_logger(__name__)
 
 class ESDLAddKPIs(Model):
 
@@ -15,6 +19,12 @@ class ESDLAddKPIs(Model):
             # TODO: human readable result
             return ''
 
+    def process_path(self, path: str, base_path: str) -> str:
+        if path[0] == '.':
+            return base_path + path.lstrip('./')
+        else:
+            return path.lstrip('./')
+
     def run(self, model_run_id: str):
         model_run_info = Model.run(self, model_run_id=model_run_id)
 
@@ -22,15 +32,17 @@ class ESDLAddKPIs(Model):
             return model_run_info
 
         config: ESDLAddETMKPIsAdapterConfig = self.model_run_dict[model_run_id].config
+        path = self.process_path(config.input_esdl_file_path, config.base_path)
 
-        input_esdl_bytes = self.load_from_minio(config.base_path + config.input_esdl_file_path)
-        input_esdl = input_esdl_bytes.decode('utf-8')
+        input_esdl_bytes = self.load_from_minio(path, model_run_id)
+        input_esdl = urllib.parse.quote(input_esdl_bytes.decode('utf-8'), safe='')
 
-        url = config.etm_config.endpoint + config.etm_config.path
+        url = config.etm_config.path + config.etm_config.endpoint
+
+        headers = {'Content-Type': 'application/x-www-form-urlencoded'}
         response = requests.post(
             url,
-            headers={'Content-Type': 'multipart/form-data'},
-            # files={"energy_system": ('my_file', input_esdl)},
+            headers=headers,
             data={
                 'scenario_id': config.scenario_ID,
                 "area_name": config.KPI_area,
