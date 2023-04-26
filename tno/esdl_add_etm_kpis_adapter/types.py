@@ -16,17 +16,31 @@ class ModelState(str, Enum):
     SUCCEEDED = "SUCCEEDED"
     ERROR = "ERROR"
 
+class ActionTypes(str, Enum):
+    ADD_KPIS = "add_kpis"
+
 @dataclass
 class ETMConfig:
-    endpoint: str
-    path: str
+    # TODO: beta or pro!
+    server: str
+    scenario_ID: int
 
 
 @dataclass
-class ESDLAddETMKPIsAdapterConfig:
-    scenario_ID: int
-    KPI_area: str
+class ActionConfig:
+    pass
+
+
+@dataclass
+class ETMAdapterConfig:
+    action: ActionTypes = field(default=ActionTypes.ADD_KPIS)
     etm_config: ETMConfig
+    action_config: ActionConfig
+
+
+@dataclass
+class ESDLAddETMKPIsAdapterConfig(ActionConfig):
+    KPI_area: str
     input_esdl_file_path: Optional[str] = None
     output_file_path: Optional[str] = None
     base_path: Optional[str] = None
@@ -35,7 +49,7 @@ class ESDLAddETMKPIsAdapterConfig:
 @dataclass
 class ModelRun:
     state: ModelState
-    config: ESDLAddETMKPIsAdapterConfig
+    config: ETMAdapterConfig
     result: dict
 
 

@@ -62,6 +62,7 @@ class Model(ABC):
         else:
             return path.lstrip('./')
 
+    # TODO: adjust config to new style
     def load_from_minio(self, path, model_run_id):
 
         path = self.process_path(path, self.model_run_dict[model_run_id].config.base_path)
@@ -79,6 +80,7 @@ class Model(ABC):
     def process_results(self, result):
         pass
 
+    # TODO: adjust config to new style
     def store_result(self, model_run_id: str, result):
         if model_run_id in self.model_run_dict:
             res = self.process_results(result)

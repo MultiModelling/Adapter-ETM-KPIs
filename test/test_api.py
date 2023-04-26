@@ -23,14 +23,14 @@ else:
 
 # TODO: update this
 post_body = {
+    "action": "add_kpis",
     "base_path": "/",
     "input_esdl_file_path": "test/Hybrid HeatPump.esdl",
     "output_file_path": "test/HHP_ETM_KPIs.esdl",
     "scenario_ID": 2187862,
     "KPI_area": "Nederland",
     "etm_config": {
-        "path": "https://beta-esdl.energytransitionmodel.com/api/v1/",
-        "endpoint": "kpis"
+        "server": "beta"
     }
 }
 

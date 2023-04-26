@@ -26,6 +26,7 @@ class Request(MethodView):
 @api.route("/initialize/<model_run_id>")
 class Initialize(MethodView):
 
+    #  TODO: Schema universeel maken
     @api.arguments(ESDLAddETMKPIsAdapterConfig.Schema())
     @api.response(201, ModelRunInfo.Schema())
     def post(self, config, model_run_id: str):
