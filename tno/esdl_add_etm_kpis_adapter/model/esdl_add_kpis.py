@@ -19,4 +19,8 @@ class ESDLAddKPIs(Model):
 
     def add_kpis(self, model_run_id) -> ModelRunInfo:
         config: ESDLAddETMKPIsAdapterConfig = self.model_run_dict[model_run_id].config
-        return AddKPIs(model_run_id).run(config)
+        self.model_run_dict[model_run_id].result = AddKPIs(model_run_id).run(config)
+        return ModelRunInfo(
+            model_run_id=model_run_id,
+            state=ModelState.SUCCEEDED,
+        )

@@ -16,17 +16,18 @@ class Model(ABC):
     def __init__(self):
         self.model_run_dict: Dict[str, ModelRun] = {}
 
-        self.minio_client = None
-        if EnvSettings.minio_endpoint():
-            logger.info(f"Connecting to Minio Object Store at {EnvSettings.minio_endpoint()}")
-            self.minio_client = Minio(
-                endpoint=EnvSettings.minio_endpoint(),
-                secure=EnvSettings.minio_secure(),
-                access_key=EnvSettings.minio_access_key(),
-                secret_key=EnvSettings.minio_secret_key()
-            )
-        else:
-            logger.info("No Minio Object Store configured")
+        # TODO: move to other class -> we can make it a singleton if we want :)
+        # self.minio_client = None
+        # if EnvSettings.minio_endpoint():
+        #     logger.info(f"Connecting to Minio Object Store at {EnvSettings.minio_endpoint()}")
+        #     self.minio_client = Minio(
+        #         endpoint=EnvSettings.minio_endpoint(),
+        #         secure=EnvSettings.minio_secure(),
+        #         access_key=EnvSettings.minio_access_key(),
+        #         secret_key=EnvSettings.minio_secret_key()
+        #     )
+        # else:
+        #     logger.info("No Minio Object Store configured")
 
     def request(self):
         model_run_id = str(uuid4())
@@ -62,6 +63,7 @@ class Model(ABC):
         else:
             return path.lstrip('./')
 
+    # TODO: move to other class
     # TODO: adjust config to new style
     def load_from_minio(self, path, model_run_id):
 
@@ -80,6 +82,7 @@ class Model(ABC):
     def process_results(self, result):
         pass
 
+    # TODO: move to other class
     # TODO: adjust config to new style
     def store_result(self, model_run_id: str, result):
         if model_run_id in self.model_run_dict:
