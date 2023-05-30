@@ -3,9 +3,6 @@ from io import BytesIO
 from typing import Dict
 from uuid import uuid4
 
-from minio import Minio
-
-from tno.esdl_add_etm_kpis_adapter.settings import EnvSettings
 from tno.esdl_add_etm_kpis_adapter.types import ModelRun, ModelState, ModelRunInfo
 from tno.shared.log import get_logger
 
@@ -69,14 +66,14 @@ class Model(ABC):
 
         path = self.process_path(path, self.model_run_dict[model_run_id].config.base_path)
 
-        bucket = path.split("/")[0]
-        rest_of_path = "/".join(path.split("/")[1:])
+        # bucket = path.split("/")[0]
+        # rest_of_path = "/".join(path.split("/")[1:])
 
-        response = self.minio_client.get_object(bucket, rest_of_path)
-        if response:
-            return response.data
-        else:
-            return None
+        # response = self.minio_client.get_object(bucket, rest_of_path)
+        # if response:
+        #     return response.data
+        # else:
+        #     return None
 
     @abstractmethod
     def process_results(self, result):

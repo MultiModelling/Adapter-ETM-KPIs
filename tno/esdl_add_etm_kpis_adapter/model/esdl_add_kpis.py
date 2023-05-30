@@ -1,5 +1,5 @@
 from tno.esdl_add_etm_kpis_adapter.model.model import Model, ModelState
-from tno.esdl_add_etm_kpis_adapter.types import ESDLAddETMKPIsAdapterConfig, ModelRunInfo
+from tno.esdl_add_etm_kpis_adapter.types import ETMAdapterConfig, ModelRunInfo
 from tno.esdl_add_etm_kpis_adapter.model.actions import AddKPIs
 
 from tno.shared.log import get_logger
@@ -18,7 +18,7 @@ class ESDLAddKPIs(Model):
             return self.add_kpis(model_run_id)
 
     def add_kpis(self, model_run_id) -> ModelRunInfo:
-        config: ESDLAddETMKPIsAdapterConfig = self.model_run_dict[model_run_id].config
+        config: ETMAdapterConfig = self.model_run_dict[model_run_id].config
         self.model_run_dict[model_run_id].result = AddKPIs(model_run_id).run(config)
         return ModelRunInfo(
             model_run_id=model_run_id,
