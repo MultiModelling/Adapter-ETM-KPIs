@@ -60,60 +60,9 @@ class Model(ABC):
         else:
             return path.lstrip('./')
 
-    # TODO: move to other class
-    # TODO: adjust config to new style
-    def load_from_minio(self, path, model_run_id):
-
-        path = self.process_path(path, self.model_run_dict[model_run_id].config.base_path)
-
-        # bucket = path.split("/")[0]
-        # rest_of_path = "/".join(path.split("/")[1:])
-
-        # response = self.minio_client.get_object(bucket, rest_of_path)
-        # if response:
-        #     return response.data
-        # else:
-        #     return None
-
     @abstractmethod
     def process_results(self, result):
         pass
-
-    # TODO: move to other class
-    # TODO: adjust config to new style
-    def store_result(self, model_run_id: str, result):
-        if model_run_id in self.model_run_dict:
-            res = self.process_results(result)
-            if self.minio_client:
-                content = BytesIO(bytes(res, 'ascii'))
-
-                path = self.process_path(self.model_run_dict[model_run_id].config.output_file_path,
-                                         self.model_run_dict[model_run_id].config.base_path)
-
-                bucket = path.split("/")[0]
-                rest_of_path = "/".join(path.split("/")[1:])
-
-                if not self.minio_client.bucket_exists(bucket):
-                    self.minio_client.make_bucket(bucket)
-
-                self.minio_client.put_object(bucket, rest_of_path, content, content.getbuffer().nbytes)
-                self.model_run_dict[model_run_id].result = {
-                    "path": path
-                }
-            else:
-                self.model_run_dict[model_run_id].result = {
-                    "result": res
-                }
-            return ModelRunInfo(
-                model_run_id=model_run_id,
-                state=ModelState.SUCCEEDED,
-            )
-        else:
-            return ModelRunInfo(
-                model_run_id=model_run_id,
-                state=ModelState.ERROR,
-                reason="Error in Model.store_result(): model_run_id unknown"
-            )
 
     def run(self, model_run_id: str):
         if model_run_id in self.model_run_dict:
