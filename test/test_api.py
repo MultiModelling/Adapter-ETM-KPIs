@@ -36,6 +36,7 @@ post_body = {
         "scenario_ID": 2187862,
     }
 }
+# TODO: add a test for create with context
 
 res = requests.post(api_endpoint + '/model/initialize/' + model_run_id, json=post_body)
 if res.ok:
