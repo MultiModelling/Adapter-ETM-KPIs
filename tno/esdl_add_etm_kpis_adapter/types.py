@@ -1,9 +1,9 @@
 from enum import Enum
-from typing import Dict, Optional, Any, ClassVar, Type
+from typing import Dict, Optional, Any, ClassVar, Type, Literal
 from marshmallow_dataclass import dataclass
 from dataclasses import field
 
-from marshmallow import Schema, fields
+from marshmallow import Schema, fields, validates, ValidationError
 
 
 class ModelState(str, Enum):
@@ -18,24 +18,35 @@ class ModelState(str, Enum):
 
 @dataclass
 class ETMConfig:
-    endpoint: str
-    path: str
+    server: str
+    scenario_ID: int
+
+
 
 
 @dataclass
 class ESDLAddETMKPIsAdapterConfig:
-    scenario_ID: int
     KPI_area: str
-    etm_config: ETMConfig
     input_esdl_file_path: Optional[str] = None
     output_file_path: Optional[str] = None
     base_path: Optional[str] = None
+
+@dataclass
+class ActionConfig:
+    add_kpis: Optional[ESDLAddETMKPIsAdapterConfig]
+
+
+@dataclass
+class ETMAdapterConfig:
+    etm_config: ETMConfig
+    action_config: ActionConfig
+    action: Literal['add_kpis', 'other_action'] = 'add_kpis'
 
 
 @dataclass
 class ModelRun:
     state: ModelState
-    config: ESDLAddETMKPIsAdapterConfig
+    config: ETMAdapterConfig
     result: dict
 
 

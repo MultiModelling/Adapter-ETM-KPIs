@@ -21,16 +21,19 @@ else:
     print("Endpoint /model/request not ok!")
     exit(1)
 
-# TODO: update this
 post_body = {
-    "base_path": "/",
-    "input_esdl_file_path": "test/Hybrid HeatPump.esdl",
-    "output_file_path": "test/HHP_ETM_KPIs.esdl",
-    "scenario_ID": 2187862,
-    "KPI_area": "Nederland",
+    "action": "add_kpis",
+    "action_config": {
+        "add_kpis": {
+            "base_path": "/",
+            "input_esdl_file_path": "test/Hybrid HeatPump.esdl",
+            "output_file_path": "test/HHP_ETM_KPIs.esdl",
+            "KPI_area": "Nederland",
+        },
+    },
     "etm_config": {
-        "path": "https://beta-esdl.energytransitionmodel.com/api/v1/",
-        "endpoint": "kpis"
+        "server": "beta",
+        "scenario_ID": 2187862,
     }
 }
 
@@ -41,6 +44,7 @@ if res.ok:
     print(result)
 else:
     print("Endpoint /model/initialize not ok!")
+    print(res.content)
     exit(1)
 
 res = requests.get(api_endpoint + '/model/run/' + model_run_id)

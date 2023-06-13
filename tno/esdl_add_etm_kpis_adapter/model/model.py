@@ -3,9 +3,6 @@ from io import BytesIO
 from typing import Dict
 from uuid import uuid4
 
-from minio import Minio
-
-from tno.esdl_add_etm_kpis_adapter.settings import EnvSettings
 from tno.esdl_add_etm_kpis_adapter.types import ModelRun, ModelState, ModelRunInfo
 from tno.shared.log import get_logger
 
@@ -15,18 +12,6 @@ logger = get_logger(__name__)
 class Model(ABC):
     def __init__(self):
         self.model_run_dict: Dict[str, ModelRun] = {}
-
-        self.minio_client = None
-        if EnvSettings.minio_endpoint():
-            logger.info(f"Connecting to Minio Object Store at {EnvSettings.minio_endpoint()}")
-            self.minio_client = Minio(
-                endpoint=EnvSettings.minio_endpoint(),
-                secure=EnvSettings.minio_secure(),
-                access_key=EnvSettings.minio_access_key(),
-                secret_key=EnvSettings.minio_secret_key()
-            )
-        else:
-            logger.info("No Minio Object Store configured")
 
     def request(self):
         model_run_id = str(uuid4())
@@ -54,63 +39,6 @@ class Model(ABC):
                 model_run_id=model_run_id,
                 state=ModelState.ERROR,
                 reason="Error in Model.initialize(): model_run_id unknown"
-            )
-
-    def process_path(self, path: str, base_path: str) -> str:
-        if path[0] == '.':
-            return base_path + path.lstrip('./')
-        else:
-            return path.lstrip('./')
-
-    def load_from_minio(self, path, model_run_id):
-
-        path = self.process_path(path, self.model_run_dict[model_run_id].config.base_path)
-
-        bucket = path.split("/")[0]
-        rest_of_path = "/".join(path.split("/")[1:])
-
-        response = self.minio_client.get_object(bucket, rest_of_path)
-        if response:
-            return response.data
-        else:
-            return None
-
-    @abstractmethod
-    def process_results(self, result):
-        pass
-
-    def store_result(self, model_run_id: str, result):
-        if model_run_id in self.model_run_dict:
-            res = self.process_results(result)
-            if self.minio_client:
-                content = BytesIO(bytes(res, 'ascii'))
-
-                path = self.process_path(self.model_run_dict[model_run_id].config.output_file_path,
-                                         self.model_run_dict[model_run_id].config.base_path)
-
-                bucket = path.split("/")[0]
-                rest_of_path = "/".join(path.split("/")[1:])
-
-                if not self.minio_client.bucket_exists(bucket):
-                    self.minio_client.make_bucket(bucket)
-
-                self.minio_client.put_object(bucket, rest_of_path, content, content.getbuffer().nbytes)
-                self.model_run_dict[model_run_id].result = {
-                    "path": path
-                }
-            else:
-                self.model_run_dict[model_run_id].result = {
-                    "result": res
-                }
-            return ModelRunInfo(
-                model_run_id=model_run_id,
-                state=ModelState.SUCCEEDED,
-            )
-        else:
-            return ModelRunInfo(
-                model_run_id=model_run_id,
-                state=ModelState.ERROR,
-                reason="Error in Model.store_result(): model_run_id unknown"
             )
 
     def run(self, model_run_id: str):
