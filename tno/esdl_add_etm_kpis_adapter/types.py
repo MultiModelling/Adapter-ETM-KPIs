@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Dict, Optional, Any, ClassVar, Type
+from typing import Dict, Optional, Any, ClassVar, Type, Literal
 from marshmallow_dataclass import dataclass
 from dataclasses import field
 
@@ -16,26 +16,17 @@ class ModelState(str, Enum):
     SUCCEEDED = "SUCCEEDED"
     ERROR = "ERROR"
 
-class ActionTypes(str, Enum):
-    ADD_KPIS = "add_kpis"
-
 @dataclass
 class ETMConfig:
-    # TODO: beta or pro!
     server: str
     scenario_ID: int
+
 
 
 @dataclass
 class ActionConfig:
     pass
-
-
-@dataclass
-class ETMAdapterConfig:
-    action: ActionTypes = field(default=ActionTypes.ADD_KPIS)
-    etm_config: ETMConfig
-    action_config: ActionConfig
+    # ADD_KPIS = ESDLAddETMKPIsAdapterConfig
 
 
 @dataclass
@@ -44,6 +35,13 @@ class ESDLAddETMKPIsAdapterConfig(ActionConfig):
     input_esdl_file_path: Optional[str] = None
     output_file_path: Optional[str] = None
     base_path: Optional[str] = None
+
+
+@dataclass
+class ETMAdapterConfig:
+    etm_config: ETMConfig
+    action_config: ActionConfig
+    action: Literal['add_kpis', 'other action'] = 'add_kpis'
 
 
 @dataclass

@@ -3,11 +3,11 @@ from flask_smorest import Blueprint
 from flask.views import MethodView
 from tno.shared.log import get_logger
 
-from tno.esdl_add_etm_kpis_adapter.types import ModelRunInfo, ESDLAddETMKPIsAdapterConfig
-from tno.esdl_add_etm_kpis_adapter.model.esdl_add_kpis import ESDLAddKPIs
+from tno.esdl_add_etm_kpis_adapter.types import ModelRunInfo, ETMAdapterConfig
+from tno.esdl_add_etm_kpis_adapter.model.etm_esdl import ETMESDL
 
 
-esdl_add_etm_kpis = ESDLAddKPIs()
+etm_esdl = ETMESDL()
 
 logger = get_logger(__name__)
 
@@ -19,18 +19,17 @@ class Request(MethodView):
 
     @api.response(200, ModelRunInfo.Schema())
     def get(self):
-        res = esdl_add_etm_kpis.request()
+        res = etm_esdl.request()
         return jsonify(res)
 
 
 @api.route("/initialize/<model_run_id>")
 class Initialize(MethodView):
 
-    #  TODO: Schema universeel maken
-    @api.arguments(ESDLAddETMKPIsAdapterConfig.Schema())
+    @api.arguments(ETMAdapterConfig.Schema())
     @api.response(201, ModelRunInfo.Schema())
     def post(self, config, model_run_id: str):
-        res = esdl_add_etm_kpis.initialize(model_run_id=model_run_id, config=config)
+        res = etm_esdl.initialize(model_run_id=model_run_id, config=config)
         return jsonify(res)
 
 
@@ -39,7 +38,7 @@ class Run(MethodView):
 
     @api.response(200, ModelRunInfo.Schema())
     def get(self, model_run_id: str):
-        res = esdl_add_etm_kpis.run(model_run_id=model_run_id)
+        res = etm_esdl.run(model_run_id=model_run_id)
         return jsonify(res)
 
 
@@ -48,7 +47,7 @@ class Status(MethodView):
 
     @api.response(200, ModelRunInfo.Schema())
     def get(self, model_run_id: str):
-        res = esdl_add_etm_kpis.status(model_run_id=model_run_id)
+        res = etm_esdl.status(model_run_id=model_run_id)
         return jsonify(res)
 
 
@@ -57,7 +56,7 @@ class results(MethodView):
 
     @api.response(200, ModelRunInfo.Schema())
     def get(self, model_run_id: str):
-        res = esdl_add_etm_kpis.results(model_run_id=model_run_id)
+        res = etm_esdl.results(model_run_id=model_run_id)
         return jsonify(res)
 
 
@@ -66,5 +65,5 @@ class remove(MethodView):
 
     @api.response(200, ModelRunInfo.Schema())
     def get(self, model_run_id: str):
-        esdl_add_etm_kpis.remove(model_run_id=model_run_id)
+        etm_esdl.remove(model_run_id=model_run_id)
         return "REMOVED!", 200

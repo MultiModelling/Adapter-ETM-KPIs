@@ -60,10 +60,6 @@ class Model(ABC):
         else:
             return path.lstrip('./')
 
-    @abstractmethod
-    def process_results(self, result):
-        pass
-
     def run(self, model_run_id: str):
         if model_run_id in self.model_run_dict:
             self.model_run_dict[model_run_id].state = ModelState.RUNNING

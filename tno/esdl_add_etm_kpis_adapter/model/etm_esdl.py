@@ -5,7 +5,7 @@ from tno.esdl_add_etm_kpis_adapter.model.actions import AddKPIs
 from tno.shared.log import get_logger
 logger = get_logger(__name__)
 
-class ESDLAddKPIs(Model):
+class ETMESDL(Model):
 
     def run(self, model_run_id: str) -> ModelRunInfo:
         model_run_info = Model.run(self, model_run_id=model_run_id)
