@@ -8,7 +8,7 @@ class AddKPISService(ETMService):
         headers = {'Content-Type': 'application/x-www-form-urlencoded'}
         data = {
             'scenario_id': self.data.etm_config.scenario_ID,
-            "area_name": self.data.action_config.KPI_area,
+            "area_name": self.data.action_config.add_kpis.KPI_area,
             "energy_system": input_esdl
         }
         server = self.data.etm_config.server

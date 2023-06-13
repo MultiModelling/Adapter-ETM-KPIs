@@ -8,7 +8,10 @@ from tno.esdl_add_etm_kpis_adapter.services.minio import MinioConnection
 class AddKPIs(BaseAction):
 
     def run(self, config: ETMAdapterConfig):
-        path = self.process_path(config.action_config.input_esdl_file_path, config.action_config.base_path)
+        path = self.process_path(
+            config.action_config.add_kpis.input_esdl_file_path,
+            config.action_config.add_kpis.base_path
+        )
 
         return self._handle_response(
             config,
@@ -20,7 +23,9 @@ class AddKPIs(BaseAction):
 
     def _activate_service(self, config: ETMAdapterConfig, input_esdl):
         return MinioConnection().store_result(
-            self.process_path(config.action_config.output_file_path, config.action_config.base_path),
-            result=AddKPISService(config).run(input_esdl)
+            self.process_path(
+                config.action_config.add_kpis.output_file_path,
+                config.action_config.add_kpis.base_path
+            ), result=AddKPISService(config).run(input_esdl)
         )
 

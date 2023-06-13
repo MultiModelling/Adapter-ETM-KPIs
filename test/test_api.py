@@ -24,10 +24,12 @@ else:
 post_body = {
     "action": "add_kpis",
     "action_config": {
-        "base_path": "/",
-        "input_esdl_file_path": "test/Hybrid HeatPump.esdl",
-        "output_file_path": "test/HHP_ETM_KPIs.esdl",
-        "KPI_area": "Nederland",
+        "add_kpis": {
+            "base_path": "/",
+            "input_esdl_file_path": "test/Hybrid HeatPump.esdl",
+            "output_file_path": "test/HHP_ETM_KPIs.esdl",
+            "KPI_area": "Nederland",
+        },
     },
     "etm_config": {
         "server": "beta",

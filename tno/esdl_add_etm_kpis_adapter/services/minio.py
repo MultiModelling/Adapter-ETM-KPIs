@@ -27,7 +27,7 @@ class MinioConnection:
                 logger.info("No Minio Object Store configured")
 
         def connected(self):
-            return True if self.minio_client else False
+            return not self.minio_client is None
 
     instance = None
     def __init__(self):
@@ -35,7 +35,7 @@ class MinioConnection:
             MinioConnection.instance = MinioConnection.__MinioConnection()
 
     def connected(self):
-        self.instance.connected()
+        return self.instance.connected()
 
     def load_from_path(self, path):
         """

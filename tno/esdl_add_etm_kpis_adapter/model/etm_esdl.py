@@ -13,13 +13,15 @@ class ETMESDL(Model):
         if model_run_info.state == ModelState.ERROR:
             return model_run_info
 
-        # TODO: use a (public) send instead of an if
-        if self.model_run_dict[model_run_id].config.action == 'add_kpis':
-            return self.add_kpis(model_run_id)
+        return getattr(self, self.model_run_dict[model_run_id].config.action)(model_run_id)
 
     def add_kpis(self, model_run_id) -> ModelRunInfo:
         config: ETMAdapterConfig = self.model_run_dict[model_run_id].config
-        self.model_run_dict[model_run_id].result = AddKPIs(model_run_id).run(config)
+        result = AddKPIs(model_run_id).run(config)
+        if isinstance(result, ModelRunInfo):
+            return result
+
+        self.model_run_dict[model_run_id].result = result
         return ModelRunInfo(
             model_run_id=model_run_id,
             state=ModelState.SUCCEEDED,

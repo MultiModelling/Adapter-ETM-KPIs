@@ -13,19 +13,6 @@ class Model(ABC):
     def __init__(self):
         self.model_run_dict: Dict[str, ModelRun] = {}
 
-        # TODO: move to other class -> we can make it a singleton if we want :)
-        # self.minio_client = None
-        # if EnvSettings.minio_endpoint():
-        #     logger.info(f"Connecting to Minio Object Store at {EnvSettings.minio_endpoint()}")
-        #     self.minio_client = Minio(
-        #         endpoint=EnvSettings.minio_endpoint(),
-        #         secure=EnvSettings.minio_secure(),
-        #         access_key=EnvSettings.minio_access_key(),
-        #         secret_key=EnvSettings.minio_secret_key()
-        #     )
-        # else:
-        #     logger.info("No Minio Object Store configured")
-
     def request(self):
         model_run_id = str(uuid4())
         self.model_run_dict[model_run_id] = ModelRun(
@@ -53,12 +40,6 @@ class Model(ABC):
                 state=ModelState.ERROR,
                 reason="Error in Model.initialize(): model_run_id unknown"
             )
-
-    def process_path(self, path: str, base_path: str) -> str:
-        if path[0] == '.':
-            return base_path + path.lstrip('./')
-        else:
-            return path.lstrip('./')
 
     def run(self, model_run_id: str):
         if model_run_id in self.model_run_dict:

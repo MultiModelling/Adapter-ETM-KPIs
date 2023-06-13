@@ -3,7 +3,7 @@ from typing import Dict, Optional, Any, ClassVar, Type, Literal
 from marshmallow_dataclass import dataclass
 from dataclasses import field
 
-from marshmallow import Schema, fields
+from marshmallow import Schema, fields, validates, ValidationError
 
 
 class ModelState(str, Enum):
@@ -23,25 +23,24 @@ class ETMConfig:
 
 
 
-@dataclass
-class ActionConfig:
-    pass
-    # ADD_KPIS = ESDLAddETMKPIsAdapterConfig
-
 
 @dataclass
-class ESDLAddETMKPIsAdapterConfig(ActionConfig):
+class ESDLAddETMKPIsAdapterConfig:
     KPI_area: str
     input_esdl_file_path: Optional[str] = None
     output_file_path: Optional[str] = None
     base_path: Optional[str] = None
+
+@dataclass
+class ActionConfig:
+    add_kpis: Optional[ESDLAddETMKPIsAdapterConfig]
 
 
 @dataclass
 class ETMAdapterConfig:
     etm_config: ETMConfig
     action_config: ActionConfig
-    action: Literal['add_kpis', 'other action'] = 'add_kpis'
+    action: Literal['add_kpis', 'other_action'] = 'add_kpis'
 
 
 @dataclass

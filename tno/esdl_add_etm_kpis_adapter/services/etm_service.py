@@ -1,3 +1,7 @@
+from tno.shared.log import get_logger
+
+logger = get_logger(__name__)
+
 class ETMService:
     ENDPOINT = ""
     BASE_URL = "esdl.energytransitionmodel.com/api/v1/"
@@ -7,6 +11,8 @@ class ETMService:
 
     def url(self, server):
         """Generates the url to sen teh request to"""
+        logger.info('Connecting to the ETM')
+
         if server == "beta":
             return f"https://beta-{self.BASE_URL}{self.ENDPOINT}"
         if server == "pro":

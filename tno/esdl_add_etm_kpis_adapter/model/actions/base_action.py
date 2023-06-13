@@ -24,12 +24,12 @@ class BaseAction:
             return path.lstrip('./')
 
     def _activate_service(self, *args):
-        """Runs the applicable ETMService and returns a ModelRunInfo with the results"""
+        """Runs the applicable ETMService and returns the results"""
         pass
 
     def _handle_response(self, *args):
         try:
-            self._activate_service(*args)
+            return self._activate_service(*args)
         except ETMConnectionError as e:
             return ModelRunInfo(
                 model_run_id=self.model_run_id,
