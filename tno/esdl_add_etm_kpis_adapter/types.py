@@ -28,6 +28,7 @@ class CreateETMScenarioFromESDLWithContextConfig:
     input_esdl_start_situation_file_path: Optional[str] = None
     input_esdl_end_situation_file_path: Optional[str] = None
 
+
 @dataclass
 class ESDLAddETMKPIsAdapterConfig:
     KPI_area: str

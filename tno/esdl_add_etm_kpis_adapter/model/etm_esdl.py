@@ -16,16 +16,18 @@ class ETMESDL(Model):
         return getattr(self, self.model_run_dict[model_run_id].config.action)(model_run_id)
 
     def add_kpis(self, model_run_id) -> ModelRunInfo:
-        config: ETMAdapterConfig = self.model_run_dict[model_run_id].config
-        return self.__handle_result(model_run_id, AddKPIs(model_run_id).run(config))
+        return self.__activate(model_run_id, AddKPIs)
 
     def create_with_context(self, model_run_id) -> ModelRunInfo:
-        config: ETMAdapterConfig = self.model_run_dict[model_run_id].config
-        return self.__handle_result(model_run_id, CreateWithContext(model_run_id).run(config))
+        return self.__activate(model_run_id, CreateWithContext)
 
     # private
 
-    def __handle_result(self, model_run_id, result):
+    def __activate(self, model_run_id, action_klass) -> ModelRunInfo:
+        config: ETMAdapterConfig = self.model_run_dict[model_run_id].config
+        return self.__handle_result(model_run_id, action_klass(model_run_id).run(config))
+
+    def __handle_result(self, model_run_id, result) -> ModelRunInfo:
         if isinstance(result, ModelRunInfo):
             return result
 
