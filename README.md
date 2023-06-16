@@ -1,4 +1,4 @@
-# MMvIB ESDL AddETM KPIs Model Adapter
+# MMvIB ETM Multi Adapter
 
 The API is available at http://localhost:9201/openapi
 
@@ -8,6 +8,11 @@ The project is based on TNO's Flask REST API template. For more information, see
 Use: `docker-compose build` to build the image
 Run the image using `docker-compose up -d`.
 
+## Different actions within the multi-adapter
+
+This multi adapter can handle different actions in the requests:
+- `add_kpis` Adds KPI from the ETM to an ESDL file
+- `create_with_context` Create a new ETM context scenario based on the changes between an ESDL start and end situation
 
 ## Flask REST API Template
 
