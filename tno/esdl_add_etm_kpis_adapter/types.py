@@ -22,6 +22,11 @@ class ETMConfig:
     scenario_ID: int
 
 
+@dataclass
+class CreateETMScenarioFromESDLWithContextConfig:
+    base_path: Optional[str] = None
+    input_esdl_start_situation_file_path: Optional[str] = None
+    input_esdl_end_situation_file_path: Optional[str] = None
 
 
 @dataclass
@@ -31,16 +36,18 @@ class ESDLAddETMKPIsAdapterConfig:
     output_file_path: Optional[str] = None
     base_path: Optional[str] = None
 
+
 @dataclass
 class ActionConfig:
     add_kpis: Optional[ESDLAddETMKPIsAdapterConfig]
+    create_with_context:  Optional[CreateETMScenarioFromESDLWithContextConfig]
 
 
 @dataclass
 class ETMAdapterConfig:
     etm_config: ETMConfig
     action_config: ActionConfig
-    action: Literal['add_kpis', 'other_action'] = 'add_kpis'
+    action: Literal['add_kpis', 'create_with_context'] = 'add_kpis'
 
 
 @dataclass
