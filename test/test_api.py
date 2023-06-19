@@ -33,6 +33,20 @@ create_context_post_body = {
     }
 }
 
+create_post_body = {
+    "action": "create",
+    "action_config": {
+        "create": {
+            "base_path": "/",
+            "input_esdl_file_path": "test/Hybrid HeatPump.esdl",
+        },
+    },
+    "etm_config": {
+        "server": "beta",
+        "scenario_ID": 2187862,
+    }
+}
+
 def test_complete_run(post_body):
 
     res = requests.get(api_endpoint + '/status')
@@ -102,8 +116,11 @@ def test_complete_run(post_body):
         print("Endpoint /model/remove not ok!")
         exit(1)
 
-print('TEST KPIS')
-test_complete_run(kpis_post_body)
+# print('TEST KPIS')
+# test_complete_run(kpis_post_body)
 
-print('\nTEST CREATE WITH CONTEXT')
-test_complete_run(create_context_post_body)
+print('\nTEST CREATE')
+test_complete_run(create_post_body)
+
+# print('\nTEST CREATE WITH CONTEXT')
+# test_complete_run(create_context_post_body)
