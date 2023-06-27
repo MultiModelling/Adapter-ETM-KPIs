@@ -2,7 +2,6 @@ import requests
 
 api_endpoint = "http://localhost:9202"
 
-
 res = requests.get(api_endpoint + '/status')
 if res.ok:
     print("Endpoint /status ok! ", res)
@@ -23,7 +22,7 @@ else:
 
 # TODO: update this
 post_body = {
-    "base_path": "/",
+    "base_path": "",
     "input_esdl_file_path": "test/Hybrid HeatPump.esdl",
     "output_file_path": "test/HHP_ETM_KPIs.esdl",
     "scenario_ID": 2187862,

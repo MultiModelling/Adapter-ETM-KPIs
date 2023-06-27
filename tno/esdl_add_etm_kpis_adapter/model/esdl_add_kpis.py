@@ -39,6 +39,8 @@ class ESDLAddKPIs(Model):
 
         url = config.etm_config.path + config.etm_config.endpoint
 
+        logger.info(f"Input ESDL: {str(input_esdl)}")
+
         headers = {'Content-Type': 'application/x-www-form-urlencoded'}
         response = requests.post(
             url,
@@ -49,6 +51,7 @@ class ESDLAddKPIs(Model):
                 "energy_system": input_esdl
             }
         )
+        logger.info(f"Response: {str(response)}")
 
         if response.ok:
             esdl_str = response.json()['energy_system']
