@@ -16,11 +16,29 @@ class ModelState(str, Enum):
     SUCCEEDED = "SUCCEEDED"
     ERROR = "ERROR"
 
+
+### Global configs
+
 @dataclass
 class ETMConfig:
     server: str
     scenario_ID: int
 
+
+@dataclass
+class InfluxDBConfig:
+    host: Optional[str] = None
+    port: Optional[int] = None
+    esdl_host: Optional[str] = None
+    esdl_port: Optional[int] = None
+    username: Optional[str] = None
+    password: Optional[str] = None
+    database: Optional[str] = None
+    measurement: Optional[str] = None
+    field: Optional[str] = None
+
+
+### Individual adapter configs
 
 @dataclass
 class CreateETMScenarioFromESDLWithContextConfig:
@@ -50,18 +68,32 @@ class ExportESDLAdapterConfig:
 
 
 @dataclass
+class AddProfileFromETMAdapterConfig:
+    "For now we only add electricity price"
+    input_esdl_file_path: Optional[str] = None
+    output_file_path: Optional[str] = None
+    base_path: Optional[str] = None
+    # profile: str = "electricity_price"
+    influx_db_config: Optional[InfluxDBConfig] = None
+    replace_year: Optional[int] = None
+
+
+@dataclass
 class ActionConfig:
     add_kpis: Optional[ESDLAddETMKPIsAdapterConfig]
     create_with_context:  Optional[CreateETMScenarioFromESDLWithContextConfig]
     create: CreateETMScenarioFromESDLConfig
     export: Optional[ExportESDLAdapterConfig]
+    add_profile: Optional[AddProfileFromETMAdapterConfig]
 
+
+### Main configs used by API
 
 @dataclass
 class ETMAdapterConfig:
     etm_config: ETMConfig
     action_config: ActionConfig
-    action: Literal['add_kpis', 'create_with_context', 'create', 'export'] = 'add_kpis'
+    action: Literal['add_kpis', 'add_profile', 'create_with_context', 'create', 'export'] = 'add_kpis'
 
 
 @dataclass
