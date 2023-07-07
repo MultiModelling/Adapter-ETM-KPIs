@@ -42,19 +42,26 @@ class ESDLAddETMKPIsAdapterConfig:
     output_file_path: Optional[str] = None
     base_path: Optional[str] = None
 
+@dataclass
+class ExportESDLAdapterConfig:
+    input_esdl_file_path: Optional[str] = None
+    output_file_path: Optional[str] = None
+    base_path: Optional[str] = None
+
 
 @dataclass
 class ActionConfig:
     add_kpis: Optional[ESDLAddETMKPIsAdapterConfig]
     create_with_context:  Optional[CreateETMScenarioFromESDLWithContextConfig]
     create: CreateETMScenarioFromESDLConfig
+    export: Optional[ExportESDLAdapterConfig]
 
 
 @dataclass
 class ETMAdapterConfig:
     etm_config: ETMConfig
     action_config: ActionConfig
-    action: Literal['add_kpis', 'create_with_context', 'create'] = 'add_kpis'
+    action: Literal['add_kpis', 'create_with_context', 'create', 'export'] = 'add_kpis'
 
 
 @dataclass

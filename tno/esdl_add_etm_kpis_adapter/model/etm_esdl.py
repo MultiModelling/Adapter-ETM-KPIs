@@ -1,6 +1,6 @@
 from tno.esdl_add_etm_kpis_adapter.model.model import Model, ModelState
 from tno.esdl_add_etm_kpis_adapter.types import ETMAdapterConfig, ModelRunInfo
-from tno.esdl_add_etm_kpis_adapter.model.actions import AddKPIs, CreateWithContext, Create
+from tno.esdl_add_etm_kpis_adapter.model.actions import AddKPIs, CreateWithContext, Create, Export
 
 from tno.shared.log import get_logger
 logger = get_logger(__name__)
@@ -23,6 +23,9 @@ class ETMESDL(Model):
 
     def create(self, model_run_id) -> ModelRunInfo:
         return self.__activate(model_run_id, Create)
+
+    def export(self, model_run_id) -> ModelRunInfo:
+        return self.__activate(model_run_id, Export)
 
     # private
 
