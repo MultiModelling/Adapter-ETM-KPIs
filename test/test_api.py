@@ -62,6 +62,31 @@ export_post_body = {
     }
 }
 
+add_profile_post_body = {
+    "action": "add_profile",
+    "action_config": {
+        "add_profile": {
+            "base_path": "/",
+            "input_esdl_file_path": "test/Hybrid HeatPump.esdl",
+            "output_esdl_file_path": "test/HHP_ETM_profile.esdl",
+            "replace_year": 2019,
+            "influxdb_config": {
+                "host": "localhost",
+                "port": 8086,
+                "esdl_host": "http://influxdb",
+                "esdl_port": 8086,
+                "database": "mmvib",
+                "measurement": "bedrijventerreinommoord",
+                "field": "E_prijs_EUR_per_MWh"
+            }
+        },
+    },
+    "etm_config": {
+        "server": "beta",
+        "scenario_ID": 2187862,
+    }
+}
+
 def test_complete_run(post_body):
 
     res = requests.get(api_endpoint + '/status')
@@ -142,3 +167,6 @@ test_complete_run(create_context_post_body)
 
 print('\nTEST EXPORT')
 test_complete_run(export_post_body)
+
+print('\nTEST ADD PROFILE')
+test_complete_run(add_profile_post_body)
