@@ -47,6 +47,21 @@ create_post_body = {
     }
 }
 
+export_post_body = {
+    "action": "export",
+    "action_config": {
+        "export": {
+            "base_path": "/",
+            "input_esdl_file_path": "test/Hybrid HeatPump.esdl",
+            "output_file_path": "test/HHP_ETM_Export.esdl",
+        },
+    },
+    "etm_config": {
+        "server": "beta",
+        "scenario_ID": 2187862,
+    }
+}
+
 def test_complete_run(post_body):
 
     res = requests.get(api_endpoint + '/status')
@@ -122,5 +137,8 @@ def test_complete_run(post_body):
 print('\nTEST CREATE')
 test_complete_run(create_post_body)
 
-# print('\nTEST CREATE WITH CONTEXT')
-# test_complete_run(create_context_post_body)
+print('\nTEST CREATE WITH CONTEXT')
+test_complete_run(create_context_post_body)
+
+print('\nTEST EXPORT')
+test_complete_run(export_post_body)
