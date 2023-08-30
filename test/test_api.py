@@ -23,13 +23,13 @@ create_context_post_body = {
     "action_config": {
         "create_with_context": {
             "base_path": "/",
-            "input_esdl_start_situation_file_path": "test/Hybrid HeatPump.esdl",
-            "input_esdl_end_situation_file_path": "test/HHP_ETM_KPIs.esdl",
+            "input_esdl_start_situation_file_path": "test/MICRO_input1.esdl",
+            "input_esdl_end_situation_file_path": "test/MICRO_input2.esdl",
         },
     },
     "etm_config": {
-        "server": "beta",
-        "scenario_ID": 2187862,
+        "server": "local",
+        "scenario_ID": 2234938,
     }
 }
 

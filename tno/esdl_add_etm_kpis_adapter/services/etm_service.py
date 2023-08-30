@@ -17,6 +17,8 @@ class ETMService:
             return f"https://beta-{self.BASE_URL}{self.ENDPOINT}"
         if server == "pro":
             return f"https://{self.BASE_URL}{self.ENDPOINT}"
+        if server == "local":
+            return f"http://host.docker.internal:5001/api/v1/{self.ENDPOINT}"
 
         raise ETMConnectionError(f"Server {server} unknown, did you mean 'beta' or 'pro'?")
 
@@ -28,7 +30,7 @@ class ETMService:
             return self._format_response(response)
 
         raise ETMConnectionError(
-            f"Error in ETM.run(): ETM API returned: {response.status_code} {response.reason}"
+            f"Error in ETM.run(): ETM API returned: {response.status_code}: {response.json()['message']}"
         )
 
     def _format_response(response):
