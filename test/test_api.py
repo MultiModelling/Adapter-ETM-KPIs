@@ -28,7 +28,7 @@ create_context_post_body = {
         },
     },
     "etm_config": {
-        "server": "local",
+        "server": "beta",
         "scenario_ID": 2234938,
     }
 }
@@ -68,9 +68,9 @@ add_profile_post_body = {
         "add_profile": {
             "base_path": "/",
             "input_esdl_file_path": "test/Hybrid HeatPump.esdl",
-            "output_esdl_file_path": "test/HHP_ETM_profile.esdl",
+            "output_file_path": "test/HHP_ETM_profile.esdl",
             "replace_year": 2019,
-            "influxdb_config": {
+            "influx_db_config": {
                 "host": "localhost",
                 "port": 8086,
                 "esdl_host": "http://influxdb",
@@ -156,8 +156,8 @@ def test_complete_run(post_body):
         print("Endpoint /model/remove not ok!")
         exit(1)
 
-# print('TEST KPIS')
-# test_complete_run(kpis_post_body)
+print('TEST KPIS')
+test_complete_run(kpis_post_body)
 
 print('\nTEST CREATE')
 test_complete_run(create_post_body)

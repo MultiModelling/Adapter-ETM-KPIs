@@ -1,4 +1,5 @@
 from tno.shared.log import get_logger
+import requests
 
 logger = get_logger(__name__)
 
@@ -29,8 +30,12 @@ class ETMService:
         if response.ok:
             return self._format_response(response)
 
+        try:
+            message = response.json().get('message', 'unknown')
+        except requests.exceptions.JSONDecodeError:
+            message = ''
         raise ETMConnectionError(
-            f"Error in ETM.run(): ETM API returned: {response.status_code}: {response.json()['message']}"
+            f"Error in ETM.run(): ETM API returned: {response.status_code}: {message}"
         )
 
     def _format_response(response):

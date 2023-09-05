@@ -82,7 +82,7 @@ class AddProfileFromETMAdapterConfig:
 class ActionConfig:
     add_kpis: Optional[ESDLAddETMKPIsAdapterConfig]
     create_with_context:  Optional[CreateETMScenarioFromESDLWithContextConfig]
-    create: CreateETMScenarioFromESDLConfig
+    create: Optional[CreateETMScenarioFromESDLConfig]
     export: Optional[ExportESDLAdapterConfig]
     add_profile: Optional[AddProfileFromETMAdapterConfig]
 

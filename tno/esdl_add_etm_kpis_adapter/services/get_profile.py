@@ -11,7 +11,7 @@ class GetETEProfile(ETMService):
     """For now locked on electricity price"""
 
     ETM_DATETIME_FORMAT = "%Y-%m-%d %H:%M"
-    BASE_URL = "energytransitionmodel.com/api/v3/scenarios/"
+    BASE_URL = "engine.energytransitionmodel.com/api/v3/scenarios/"
     ENDPOINT = "curves/electricity_price.csv"
 
     def run(self):
