@@ -4,3 +4,4 @@ from .create_with_context import CreateWithContextService
 from .create import CreateService
 from .export import ExportService
 from .get_profile import GetETEProfile
+from .get_queries import GetETEQueries
