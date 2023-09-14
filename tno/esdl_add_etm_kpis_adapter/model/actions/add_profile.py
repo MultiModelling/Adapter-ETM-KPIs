@@ -92,7 +92,7 @@ class AddProfile(BaseAction):
                 if asset.type == esdl.PowerPlantTypeEnum.NUCLEAR_2ND_GENERATION:
                     self._add_curve_to_inport(influx_db, asset, curves['capacity_of_energy_power_nuclear_gen2_uranium_oxide_output_curve'])
                 elif asset.type == esdl.PowerPlantTypeEnum.NUCLEAR_3RD_GENERATION:
-                    self._add_curve_to_inport(influx_db, asset, curves['capacity_of_energy_power_nuclear_gen2_uranium_oxide_output_curve'])
+                    self._add_curve_to_inport(influx_db, asset, curves['capacity_of_energy_power_nuclear_gen3_uranium_oxide_output_curve'])
 
 
         return esh.to_string()
