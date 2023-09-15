@@ -46,8 +46,9 @@ class AddProfile(BaseAction):
         curves = GetETEQueries(config).run()
 
         influx_db = None
-        if config.add_profile.influxdb_config:
-            influx_db = InfluxDBService(config.add_profile.influxdb_config)
+        # TODO: dit is niet de goede check om te zien of dat rotding leeg is
+        if config.action_config.add_profile.influxdb_config:
+            influx_db = InfluxDBService(config.action_config.add_profile.influxdb_config)
             influx_db.upload_profile(profile)
 
         esh = EnergySystemHandler()
@@ -73,8 +74,8 @@ class AddProfile(BaseAction):
         for asset in all_assets:
             if isinstance(asset, esdl.WindTurbine):
                 self._add_curve_to_inport(influx_db, asset, curves['capacity_of_energy_power_wind_turbine_inland_curve'])
-            elif isinstance(asset, esdl.Battery):
-                self._add_curve_to_inport(influx_db, asset, curves['capacity_of_energy_flexibility_mv_batteries_electricity_output_curve'])
+            # elif isinstance(asset, esdl.Battery):
+            #     self._add_curve_to_inport(influx_db, asset, curves['capacity_of_energy_flexibility_mv_batteries_electricity_output_curve'])
             elif isinstance(asset, esdl.Electrolyzer):
                 self._add_curve_to_inport(influx_db, asset, curves['capacity_of_energy_hydrogen_flexibility_p2g_electricity_output_curve'])
             elif isinstance(asset, esdl.GasConversion):

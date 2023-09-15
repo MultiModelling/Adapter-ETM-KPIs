@@ -15,7 +15,7 @@ class GetETEQueries(ETMService):
     GQUERIES = {
         "gqueries": [
             'capacity_of_energy_power_wind_turbine_inland_curve',
-            'capacity_of_energy_flexibility_mv_batteries_electricity_output_curve',
+            # 'capacity_of_energy_flexibility_mv_batteries_electricity_output_curve',
             'capacity_of_energy_hydrogen_flexibility_p2g_electricity_output_curve',
             'capacity_of_energy_hydrogen_steam_methane_reformer_output_curve',
             'capacity_of_energy_power_solar_pv_solar_radiation_curve',
@@ -29,16 +29,19 @@ class GetETEQueries(ETMService):
 
     def run(self):
         """Gets the profile from the engine and returns it as values"""
-        return self._handle_response(requests.put(self.url(self.data.etm_config.server), data=GetETEQueries.GQUERIES))
+        return self._handle_response(requests.put(self.url(self.data.etm_config.server), json=GetETEQueries.GQUERIES))
 
     def url(self, server):
         """Generates the url to sen teh request to"""
         logger.info('Connecting to the ETM')
 
         if server == "beta":
+            logger.info('beta')
             return f"https://beta-{self.BASE_URL}{self.data.etm_config.scenario_ID}{self.ENDPOINT}"
         if server == "pro":
             return f"https://{self.BASE_URL}{self.data.etm_config.scenario_ID}{self.ENDPOINT}"
+        if server == "local":
+            return f"http://localhost:3000/api/v3/scenarios/{self.data.etm_config.scenario_ID}"
 
         raise ETMConnectionError(f"Server {server} unknown, did you mean 'beta' or 'pro'?")
 

@@ -12,7 +12,7 @@ class GetETEProfile(ETMService):
 
     ETM_DATETIME_FORMAT = "%Y-%m-%d %H:%M"
     BASE_URL = "engine.energytransitionmodel.com/api/v3/scenarios/"
-    ENDPOINT = "curves/electricity_price.csv"
+    ENDPOINT = "/curves/electricity_price.csv"
 
     def run(self):
         """Gets the profile from the engine and returns it as values"""
@@ -26,6 +26,8 @@ class GetETEProfile(ETMService):
             return f"https://beta-{self.BASE_URL}{self.data.etm_config.scenario_ID}{self.ENDPOINT}"
         if server == "pro":
             return f"https://{self.BASE_URL}{self.data.etm_config.scenario_ID}{self.ENDPOINT}"
+        if server == "local":
+            return f"http://localhost:3000/api/v3/scenarios/{self.data.etm_config.scenario_ID}{self.ENDPOINT}"
 
         raise ETMConnectionError(f"Server {server} unknown, did you mean 'beta' or 'pro'?")
 
@@ -45,7 +47,7 @@ class GetETEProfile(ETMService):
         utc = pytz.timezone("UTC")
 
 
-        dt = datetime.strptime(dt_str, GetETEProfile.ETM_DATETIME_FORMAT)
+        dt = datetime.datetime.strptime(dt_str, GetETEProfile.ETM_DATETIME_FORMAT)
         cet_dt = cet.localize(dt)           # Assume CET timezone for dates returned by ETM
         utc_dt = cet_dt.astimezone(utc)     # Convert them to UTC...
         return utc_dt

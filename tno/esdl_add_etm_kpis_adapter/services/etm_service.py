@@ -32,6 +32,8 @@ class ETMService:
 
         try:
             message = response.json().get('message', 'unknown')
+            if message == 'unknown':
+                message = response.json().get('errors', 'unknown')
         except requests.exceptions.JSONDecodeError:
             message = ''
         raise ETMConnectionError(
