@@ -3,8 +3,9 @@ import urllib.parse
 from esdl import esdl
 from esdl.esdl_handler import EnergySystemHandler
 from uuid import uuid4
+from lxml.etree import XMLSyntaxError
 
-from tno.esdl_add_etm_kpis_adapter.model.actions.base_action import BaseAction
+from tno.esdl_add_etm_kpis_adapter.model.actions.base_action import BaseAction, ESDLError
 from tno.esdl_add_etm_kpis_adapter.types import ETMAdapterConfig
 from tno.esdl_add_etm_kpis_adapter.services import GetETEProfile, GetETEQueries
 from tno.esdl_add_etm_kpis_adapter.services.minio import MinioConnection
@@ -24,10 +25,7 @@ class AddProfile(BaseAction):
 
         return self._handle_response(
             config,
-            urllib.parse.quote(
-                MinioConnection().load_from_path(path).decode('utf-8'),
-                safe=''
-            )
+            MinioConnection().load_from_path(path).decode('utf-8')
         )
 
     def _activate_service(self, config: ETMAdapterConfig, input_esdl):
@@ -46,13 +44,12 @@ class AddProfile(BaseAction):
         curves = GetETEQueries(config).run()
 
         influx_db = None
-        # TODO: dit is niet de goede check om te zien of dat rotding leeg is
-        if config.action_config.add_profile.influxdb_config:
+        if self._has_influx(config):
             influx_db = InfluxDBService(config.action_config.add_profile.influxdb_config)
             influx_db.upload_profile(profile)
 
         esh = EnergySystemHandler()
-        es = esh.load_from_string(input_esdl)
+        es = AddProfile.load_es(esh, input_esdl)
 
         # Price profile
         esi: esdl.EnergySystemInformation = es.energySystemInformation
@@ -69,7 +66,7 @@ class AddProfile(BaseAction):
             logger.info('Could not attach profile: EnergySystemInformation missing')
 
         # Add curves
-        all_assets = es.instance.area.asset
+        all_assets = es.instance[0].area.asset
 
         for asset in all_assets:
             if isinstance(asset, esdl.WindTurbine):
@@ -89,7 +86,7 @@ class AddProfile(BaseAction):
                     self._add_curve_to_inport(influx_db, asset, curves['capacity_of_transport_truck_using_electricity_curve'])
                 elif asset.type == esdl.VehicleTypeEnum.VAN:
                     self._add_curve_to_inport(influx_db, asset, curves['capacity_of_transport_van_using_electricity_curve'])
-            elif isinstance(asset, esdl.Powerplant):
+            elif isinstance(asset, esdl.PowerPlant):
                 if asset.type == esdl.PowerPlantTypeEnum.NUCLEAR_2ND_GENERATION:
                     self._add_curve_to_inport(influx_db, asset, curves['capacity_of_energy_power_nuclear_gen2_uranium_oxide_output_curve'])
                 elif asset.type == esdl.PowerPlantTypeEnum.NUCLEAR_3RD_GENERATION:
@@ -98,11 +95,25 @@ class AddProfile(BaseAction):
 
         return esh.to_string()
 
+    def _has_influx(self, config):
+        try:
+            config.action_config.add_profile.influxdb_config
+            return True
+        except AttributeError:
+            return False
+
     def _add_curve_to_inport(self, influx_db, asset, curve):
         if influx_db:
-            asset.port[0].profile = influx_db.create_esdl_influxdb_profile(curve)
+            asset.port[0].profile += influx_db.create_esdl_influxdb_profile(curve)
         else:
-            asset.port[0].profile = AddProfile.create_esdl_timeseries_profile(curve)
+            asset.port[0].profile += AddProfile.create_esdl_timeseries_profile(curve)
+
+    @staticmethod
+    def load_es(esh, input_esdl):
+        try:
+            return esh.load_from_string(input_esdl)
+        except XMLSyntaxError as e:
+            raise ESDLError(f'Could not parse ESDL file: {e}') from e
 
     @staticmethod
     def create_esdl_timeseries_profile(profile_array):
@@ -122,3 +133,4 @@ class AddProfile(BaseAction):
         )
 
         return profile
+

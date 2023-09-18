@@ -30,9 +30,12 @@ class BaseAction:
     def _handle_response(self, *args):
         try:
             return self._activate_service(*args)
-        except ETMConnectionError as e:
+        except (ETMConnectionError, ESDLError) as e:
             return ModelRunInfo(
                 model_run_id=self.model_run_id,
                 state=ModelState.ERROR,
                 reason=getattr(e, 'message', repr(e))
             )
+
+class ESDLError(BaseException):
+    pass

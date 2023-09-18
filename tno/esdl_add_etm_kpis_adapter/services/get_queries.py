@@ -49,21 +49,26 @@ class GetETEQueries(ETMService):
 
     def _format_response(self, response):
         return {
-            key: [
-                GetETEQueries.gen_days(self.data.action_config.add_profile.replace_year),
+            key: GetETEQueries.format_result(
+                self.data.action_config.add_profile.replace_year,
                 results['future']
-            ]
+            )
             for key, results in response.json()['gqueries'].items()
         }
 
     # Static
     @staticmethod
+    def format_result(year, curve):
+        date = GetETEQueries.gen_days(year)
+        return [[next(date), float(value)] for value in curve]
+
+
+    @staticmethod
     def gen_days( year ):
         start_date=datetime( year, 1, 1 )
-        end_date=datetime( year, 12, 31 )
+        end_date=datetime( year + 1 , 1, 1 )
         d=start_date
-        dates=[ start_date ]
+        yield start_date
         while d < end_date:
             d += timedelta(hours=1)
-            dates.append( d )
-        return dates
+            yield d
