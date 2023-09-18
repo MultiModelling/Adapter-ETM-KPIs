@@ -36,7 +36,6 @@ class GetETEQueries(ETMService):
         logger.info('Connecting to the ETM')
 
         if server == "beta":
-            logger.info('beta')
             return f"https://beta-{self.BASE_URL}{self.data.etm_config.scenario_ID}{self.ENDPOINT}"
         if server == "pro":
             return f"https://{self.BASE_URL}{self.data.etm_config.scenario_ID}{self.ENDPOINT}"
