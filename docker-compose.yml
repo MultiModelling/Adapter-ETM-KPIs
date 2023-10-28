@@ -1,4 +1,4 @@
-version: "3.2"
+version: "3.8"
 
 services:
   mmvib-etm-kpis-adapter:
@@ -15,5 +15,6 @@ services:
 
 networks:
   mmvib-net:
-    external:
-      name: mmvib-net
+    driver: bridge
+    external: true
+    name: mmvib-net
