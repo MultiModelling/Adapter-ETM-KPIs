@@ -29,6 +29,7 @@ class Initialize(MethodView):
     @api.arguments(ETMAdapterConfig.Schema())
     @api.response(201, ModelRunInfo.Schema())
     def post(self, config, model_run_id: str):
+        logger.info(config)
         res = etm_esdl.initialize(model_run_id=model_run_id, config=config)
         return jsonify(res)
 

@@ -13,6 +13,8 @@ class ExportService(ETMService):
             'session_id_min': self.data.etm_config.scenario_ID,
             'energy_system': input_esdl
         }
+        if self.data.etm_config.scenario_ID_max is not None:
+            data['session_id_max'] = self.data.etm_config.scenario_ID_max
         server = self.data.etm_config.server
         return self._handle_response(requests.post(self.url(server), headers=headers, data=data))
 

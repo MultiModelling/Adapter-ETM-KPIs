@@ -10,22 +10,19 @@ class AddKPIs(BaseAction):
     def run(self, config: ETMAdapterConfig):
         path = self.process_path(
             config.action_config.add_kpis.input_esdl_file_path,
-            config.action_config.add_kpis.base_path
+            config.base_path
         )
 
         return self._handle_response(
             config,
-            urllib.parse.quote(
-                MinioConnection().load_from_path(path).decode('utf-8'),
-                safe=''
-            )
+            MinioConnection().load_from_path(path).decode('utf-8')
         )
 
     def _activate_service(self, config: ETMAdapterConfig, input_esdl):
         return MinioConnection().store_result(
             self.process_path(
                 config.action_config.add_kpis.output_file_path,
-                config.action_config.add_kpis.base_path
+                config.base_path
             ), result=AddKPISService(config).run(input_esdl)
         )
 

@@ -10,22 +10,19 @@ class Export(BaseAction):
     def run(self, config: ETMAdapterConfig):
         path = self.process_path(
             config.action_config.export.input_esdl_file_path,
-            config.action_config.export.base_path
+            config.base_path
         )
 
         return self._handle_response(
             config,
-            urllib.parse.quote(
-                MinioConnection().load_from_path(path).decode('utf-8'),
-                safe=''
-            )
+            MinioConnection().load_from_path(path).decode('utf-8')
         )
 
     def _activate_service(self, config: ETMAdapterConfig, input_esdl):
         return MinioConnection().store_result(
             self.process_path(
                 config.action_config.export.output_file_path,
-                config.action_config.export.base_path
+                config.base_path
             ), result=ExportService(config).run(input_esdl)
         )
 

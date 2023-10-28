@@ -24,7 +24,7 @@ app = create_app("tno.esdl_add_etm_kpis_adapter.settings.%sConfig" % EnvSettings
 
 @app.before_request
 def before_request():
-    print(request)
+    logger.debug(request)
 
 
 @app.after_request

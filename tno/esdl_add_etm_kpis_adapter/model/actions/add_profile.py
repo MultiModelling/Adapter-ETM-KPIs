@@ -20,7 +20,7 @@ class AddProfile(BaseAction):
     def run(self, config: ETMAdapterConfig):
         path = self.process_path(
             config.action_config.add_profile.input_esdl_file_path,
-            config.action_config.add_profile.base_path
+            config.base_path
         )
 
         return self._handle_response(
@@ -32,7 +32,7 @@ class AddProfile(BaseAction):
         return MinioConnection().store_result(
             self.process_path(
                 config.action_config.add_profile.output_file_path,
-                config.action_config.add_profile.base_path
+                config.base_path
             ), result=self._attach_profile(config, input_esdl)
         )
 

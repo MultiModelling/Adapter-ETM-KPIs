@@ -1,6 +1,9 @@
 import requests
 
 from .etm_service import ETMService
+
+from tno.shared.log import get_logger
+logger = get_logger(__name__)
 class CreateWithContextService(ETMService):
     ENDPOINT = 'create_with_context'
 
@@ -12,7 +15,12 @@ class CreateWithContextService(ETMService):
             "energy_system_end_situation": input_esdl_end,
         }
         server = self.data.etm_config.server
-        return self._handle_response(requests.post(self.url(server), headers=headers, data=data))
+        logger.debug(f"server: {self.url(server)}")
+        logger.debug(f"headers: {headers}")
+        logger.debug(f"data: {data}")
+        r = requests.post(self.url(server), headers=headers, data=data)
+        logger.debug(r.request.body)
+        return self._handle_response(r)
 
     def _format_response(self, response):
         return response.json()['scenario_id']

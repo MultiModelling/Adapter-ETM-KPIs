@@ -54,7 +54,7 @@ def create_app(object_name):
             r = requests.post(EnvSettings.registry_endpoint(), json=registry_data)
             r.raise_for_status()
         except requests.exceptions.HTTPError as e:
-            print(e.response.text)
+            logger.exception(e.response.text)
 
     CORS(app, resources={r"/*": {"origins": "*"}})
 

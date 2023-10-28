@@ -23,6 +23,7 @@ class ModelState(str, Enum):
 class ETMConfig:
     server: str
     scenario_ID: int
+    scenario_ID_max: Optional[int] = None
 
 
 @dataclass
@@ -42,14 +43,12 @@ class InfluxDBConfig:
 
 @dataclass
 class CreateETMScenarioFromESDLWithContextConfig:
-    base_path: Optional[str] = None
     input_esdl_start_situation_file_path: Optional[str] = None
     input_esdl_end_situation_file_path: Optional[str] = None
 
 
 @dataclass
 class CreateETMScenarioFromESDLConfig:
-    base_path: Optional[str] = None
     input_esdl_file_path: Optional[str] = None
 
 
@@ -58,13 +57,11 @@ class ESDLAddETMKPIsAdapterConfig:
     KPI_area: str
     input_esdl_file_path: Optional[str] = None
     output_file_path: Optional[str] = None
-    base_path: Optional[str] = None
 
 @dataclass
 class ExportESDLAdapterConfig:
     input_esdl_file_path: Optional[str] = None
     output_file_path: Optional[str] = None
-    base_path: Optional[str] = None
 
 
 @dataclass
@@ -72,7 +69,6 @@ class AddProfileFromETMAdapterConfig:
     "For now we only add electricity price"
     input_esdl_file_path: Optional[str] = None
     output_file_path: Optional[str] = None
-    base_path: Optional[str] = None
     # profile: str = "electricity_price"
     influx_db_config: Optional[InfluxDBConfig] = None
     replace_year: Optional[int] = None
@@ -94,6 +90,7 @@ class ETMAdapterConfig:
     etm_config: ETMConfig
     action_config: ActionConfig
     action: Literal['add_kpis', 'add_profile', 'create_with_context', 'create', 'export'] = 'add_kpis'
+    base_path: Optional[str] = None
 
 
 @dataclass
